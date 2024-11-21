@@ -1,13 +1,18 @@
+// Menu.tsx
 import React, { useState, useEffect } from 'react';
 import { ClientEvents } from '@shared/ClientEvents';
 import { useLocation } from 'react-router-dom';
+import { useSocketManager } from '../../hooks/useSocketManager';
 
-function Menu({
-  sm,
-}) {
+
+// Define the types for Menu props
+interface MenuProps {
+  sm: ReturnType<typeof useSocketManager>['sm']; 
+}
+
+const Menu: React.FC<MenuProps> = ({ sm }) => {
   const location = useLocation();
 
-  // State to store the lobby code
   const [lobbyCode, setLobbyCode] = useState('');
 
   useEffect(() => {
@@ -36,7 +41,6 @@ function Menu({
   };
 
   const onJoinLobby = () => {
-    console.log("lobbyCode", lobbyCode);
     if (lobbyCode.trim()) {
       sm.emit({
         event: ClientEvents.LobbyJoin,
@@ -62,6 +66,6 @@ function Menu({
       ></input>
     </div>
   );
-}
+};
 
 export default Menu;
