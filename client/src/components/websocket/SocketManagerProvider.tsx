@@ -1,4 +1,4 @@
-import SocketManager from './SocketManager'
+import SocketManager from 'components/websocket/SocketManager'
 import SocketState from './SocketState'
 import React, { createContext } from 'react'
 import { useSetRecoilState } from 'recoil'

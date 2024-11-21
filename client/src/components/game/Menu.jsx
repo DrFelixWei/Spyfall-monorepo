@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ClientEvents } from '../websocket/ClientEvents';
+import { ClientEvents } from '@shared/ClientEvents';
 import { useLocation } from 'react-router-dom';
 
 function Menu({

@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
-import { ServerEvents } from '../websocket/ServerEvents';
-import { ServerPayloads } from '../websocket/ServerPayloads';
+import { ServerEvents } from '@shared/ServerEvents';
+import { ServerPayloads } from '@shared/ServerPayloads';
 
 export const CurrentLobbyState = atom<ServerPayloads[ServerEvents.LobbyState] | null>({
   key: 'CurrentLobbyState',

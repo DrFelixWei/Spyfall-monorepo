@@ -1,13 +1,12 @@
 import { useEffect } from 'react'
 import { useSocketManager } from '../../hooks/useSocketManager'
-import { ServerEvents } from '../websocket/ServerEvents'
-// import { ServerPayloads } from '../websocket/ServerPayloads'
+import { ServerEvents } from '@shared/ServerEvents'
+import { ServerPayloads } from '@shared/ServerPayloads'
+import { ClientEvents } from '@shared/ClientEvents';
 import { useRecoilState } from 'recoil'
 import { CurrentLobbyState } from './states'
 import Menu from './Menu'
 import GameScreen from './GameScreen'
-import handleMove from './MoveHandler'
-import { ClientEvents } from '../websocket/ClientEvents';
 
 export default function GameManager() {
   const { sm } = useSocketManager()

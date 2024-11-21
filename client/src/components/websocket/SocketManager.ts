@@ -1,9 +1,9 @@
 import { io, Socket } from 'socket.io-client'
 import { SocketState } from './SocketState'
-import { Listener } from './types'
-import { ClientEvents } from './ClientEvents'
-import { ServerEvents } from './ServerEvents'
-import { ServerExceptionResponse } from './SocketExceptions'
+import { Listener } from '@shared/types'
+import { ClientEvents } from '@shared/ClientEvents'
+import { ServerEvents } from '@shared/ServerEvents'
+import { ServerExceptionResponse } from '@shared/SocketExceptions'
 import { SetterOrUpdater } from 'recoil'
 
 type EmitOptions<T> = {

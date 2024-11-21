@@ -1,2 +1,2 @@
-# WarChess Client
+# Spyfall Client
 

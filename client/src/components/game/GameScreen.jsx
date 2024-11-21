@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useSocketManager } from '../../../../shared/hooks/useSocketManager'
-import { ClientEvents } from '../websocket/ClientEvents'
+import { useSocketManager } from '../../hooks/useSocketManager'
+import { ClientEvents } from '@shared/ClientEvents'
 import { useLocation } from 'react-router-dom' 
 // import { emitEvent } from './utils/analytics'
 import { Themes } from './Themes'

@@ -9,7 +9,11 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "baseUrl": "src",
+    "paths": {
+      "@shared/*": ["../../shared/*"]
+    }
   },
-  "include": ["src", "../shared/hooks"]
+  "include": ["src"]
 }
