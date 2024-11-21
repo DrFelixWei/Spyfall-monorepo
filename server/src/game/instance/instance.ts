@@ -1,11 +1,9 @@
 import { Lobby } from '@app/game/lobby/lobby';
 import { Socket } from 'socket.io';
-import { ServerPayloads } from '@app/websocket/ServerPayloads';
-import { ServerEvents } from '@app/websocket/ServerEvents';
-import { Board } from '@app/game/Board';
-import { Piece, Position } from '@app/game/pieces/Piece';
+import { ServerPayloads } from '@shared/ServerPayloads';
+import { ServerEvents } from '@shared/ServerEvents';
+import { SocketExceptions } from '@shared/SocketExceptions';
 import { ServerException } from '@app/game/server.exception';
-import { SocketExceptions } from '@app/websocket/SocketExceptions';
 
 export class Instance
 {
@@ -14,6 +12,9 @@ export class Instance
   public hasFinished: boolean = false;
 
   public isSuspended: boolean = false;
+
+  // public scores: Record<Socket['id'], number> = {};
+  // private cardsRevealedForCurrentRound: Record<number, Socket['id']> = {};
 
   public players: string[] = [];
 

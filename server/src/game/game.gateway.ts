@@ -7,15 +7,15 @@ import {
   WebSocketGateway,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ClientEvents } from '@app/websocket/ClientEvents';
-import { ServerEvents } from '@app/websocket/ServerEvents';
+import { ClientEvents } from '@shared/ClientEvents';
+import { ServerEvents } from '@shared/ServerEvents';
+import { SocketExceptions } from '@shared/SocketExceptions';
+import { ServerPayloads } from '@shared/ServerPayloads';
 import { LobbyManager } from '@app/game/lobby/lobby.manager';
 import { Logger, UsePipes } from '@nestjs/common';
 import { AuthenticatedSocket } from '@app/game/types';
 import { ServerException } from '@app/game/server.exception';
-import { SocketExceptions } from '@app/websocket/SocketExceptions';
-import { ServerPayloads } from '@app/websocket/ServerPayloads';
-import { LobbyCreateDto, LobbyJoinDto, GameMovePieceDto } from '@app/game/dtos';
+import { LobbyCreateDto, LobbyJoinDto } from '@app/game/dtos';
 import { WsValidationPipe } from '@app/websocket/ws.validation-pipe';
 
 @UsePipes(new WsValidationPipe())
@@ -86,26 +86,26 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
 
-  @SubscribeMessage(ClientEvents.GameMovePiece)
-  onGameMovePiece(
-    client: AuthenticatedSocket,
-    data: GameMovePieceDto,
-  ): void 
-  {
-    try {
-      const lobby = this.lobbyManager.getLobby(data.lobbyId);
-      if (!lobby) {
-        throw new ServerException(SocketExceptions.LobbyError);
-      }
+  // @SubscribeMessage(ClientEvents.GameMovePiece)
+  // onGameMovePiece(
+  //   client: AuthenticatedSocket,
+  //   data: GameMovePieceDto,
+  // ): void 
+  // {
+  //   try {
+  //     const lobby = this.lobbyManager.getLobby(data.lobbyId);
+  //     if (!lobby) {
+  //       throw new ServerException(SocketExceptions.LobbyError);
+  //     }
   
-      lobby.instance.handleMovePiece(data);
-    } catch (error) {
-      if (error instanceof ServerException) {
-        // notify client about lost connection
-      }
-    }
+  //     lobby.instance.handleMovePiece(data);
+  //   } catch (error) {
+  //     if (error instanceof ServerException) {
+  //       // notify client about lost connection
+  //     }
+  //   }
 
-  }
+  // }
 
 
 }

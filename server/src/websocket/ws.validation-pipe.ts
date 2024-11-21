@@ -1,6 +1,6 @@
 import { Injectable, ValidationPipe } from '@nestjs/common';
 import { ServerException } from '@app/game/server.exception';
-import { SocketExceptions } from './SocketExceptions';
+import { SocketExceptions } from '@shared/SocketExceptions';
 
 @Injectable()
 export class WsValidationPipe extends ValidationPipe

@@ -1,9 +1,9 @@
 import { v4 } from 'uuid';
 import { Server, Socket } from 'socket.io';
-import { ServerEvents } from '@app/websocket/ServerEvents';
+import { ServerEvents } from '@shared/ServerEvents';
 import { AuthenticatedSocket } from '@app/game/types';
 import { Instance } from '@app/game/instance/instance';
-import { ServerPayloads } from '@app/websocket/ServerPayloads';
+import { ServerPayloads } from '@shared/ServerPayloads';
 
 export class Lobby
 {
@@ -58,7 +58,7 @@ export class Lobby
     // console.log("this.clients:", this.clients)
     const payload: ServerPayloads[ServerEvents.LobbyState] = {
       lobbyId: this.id,
-      players: this.instance.players,
+      // players: this.instance.players,
       // turn: this.instance.turn,
       // board: this.instance.board,
       // mode: this.maxClients === 1 ? 'solo' : 'duo',

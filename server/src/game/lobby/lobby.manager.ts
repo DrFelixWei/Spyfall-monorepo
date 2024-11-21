@@ -2,10 +2,10 @@ import { Lobby } from '@app/game/lobby/lobby';
 import { Server } from 'socket.io';
 import { AuthenticatedSocket } from '@app/game/types';
 import { ServerException } from '@app/game/server.exception';
-import { SocketExceptions } from '@app/websocket/SocketExceptions';
+import { SocketExceptions } from '@shared/SocketExceptions';
+import { ServerEvents } from '@shared/ServerEvents';
+import { ServerPayloads } from '@shared/ServerPayloads';
 import { LOBBY_MAX_LIFETIME } from '@app/game/constants';
-import { ServerEvents } from '@app/websocket/ServerEvents';
-import { ServerPayloads } from '@app/websocket/ServerPayloads';
 // import { Cron } from '@nestjs/schedule';
 
 export class LobbyManager

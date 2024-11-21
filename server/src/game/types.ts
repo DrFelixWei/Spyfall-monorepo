@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { Lobby } from '@app/game/lobby/lobby';
-import { ServerEvents } from '@app/websocket/ServerEvents';
+import { ServerEvents } from '@shared/ServerEvents';
 
 export type AuthenticatedSocket = Socket & {
   data: {

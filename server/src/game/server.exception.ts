@@ -1,6 +1,6 @@
 import { WsException } from '@nestjs/websockets';
-import { SocketExceptions } from '@app/websocket/SocketExceptions';
-import { ServerExceptionResponse } from '@app/websocket/types';
+import { SocketExceptions } from '@shared/SocketExceptions';
+import { ServerExceptionResponse } from '@shared/types';
 
 export class ServerException extends WsException
 {
