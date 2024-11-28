@@ -9,10 +9,14 @@ import { Themes } from './themes'
 
 
 interface GameScreenProps {
+  sm: ReturnType<typeof useSocketManager>['sm']; 
   lobbyState: ServerPayloads[ServerEvents.LobbyState];
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({ lobbyState }) => {
+const GameScreen: React.FC<GameScreenProps> = ({ 
+  sm,
+  lobbyState 
+}) => {
   // console.log("lobbyState", lobbyState)
 
   const [theme, setTheme] = useState(Themes.dark)

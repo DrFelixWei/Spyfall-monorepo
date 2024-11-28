@@ -5,7 +5,7 @@ import type { ServerPayloads } from '@shared/ServerPayloads';
 import { ClientEvents } from '@shared/ClientEvents';
 import { useRecoilState } from 'recoil';
 import { CurrentLobbyState } from './states';
-import Menu from './Menu';
+import MenuScreen from './MenuScreen';
 import GameScreen from './GameScreen';
 
 // Define the types for GameManager props
@@ -41,8 +41,8 @@ export default function GameManager() {
   }, [sm, setLobbyState]);
 
   if (lobbyState === null) {
-    return <Menu sm={sm} />;
+    return <MenuScreen sm={sm} />;
   }
 
-  return <GameScreen lobbyState={lobbyState} />;
+  return <GameScreen sm={sm} lobbyState={lobbyState} />;
 }

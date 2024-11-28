@@ -1,16 +1,11 @@
-import React from 'react'
-// import Header from './components/Header'
-import GameManager from './components/game/GameManager'
+import React, { useState } from 'react';
 
-function App() {
+import GameManager from './components/game/GameManager';
 
+const App = () => {
 
-  return (
-    <div>
-        {/* <Header/> */}
-        <GameManager/>
-    </div>
-  )
-}
+  return <GameManager />;
+};
 
-export default App
+export default App;
+

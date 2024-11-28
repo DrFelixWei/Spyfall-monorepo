@@ -14,7 +14,7 @@ The original game was a boardgame. Since then, there have been several online it
 
 
 ## Tech Stack
-Frontend: vite-react
+Frontend: vite-react - philosphy of choosing this over nextjs is that I'm using a single page that conditionally renders based on server data
 Backend: nestjs + sockets
 
 
