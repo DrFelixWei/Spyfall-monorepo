@@ -17,6 +17,8 @@ const GameScreen: React.FC<GameScreenProps> = ({
   sm,
   lobbyState 
 }) => {
+
+  
   // console.log("lobbyState", lobbyState)
 
   const [theme, setTheme] = useState(Themes.dark)
@@ -38,6 +40,11 @@ const GameScreen: React.FC<GameScreenProps> = ({
   return (
     <div>
         GAMESCREEN
+
+        {lobbyState.lobbyId}
+        {lobbyState.players.map((player) => (
+          <div key={player}>{player}</div>
+        ))}
 
     </div>
   )

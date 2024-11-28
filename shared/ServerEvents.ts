@@ -8,4 +8,5 @@ export enum ServerEvents
 
   // Game
   GameMessage = 'server.game.message',
+  TimerUpdate = 'server.game.timer',
 }

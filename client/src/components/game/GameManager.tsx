@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSocketManager } from '../../hooks/useSocketManager';
 import { ServerEvents } from '@shared/ServerEvents';
 import type { ServerPayloads } from '@shared/ServerPayloads';
@@ -22,9 +22,8 @@ export default function GameManager() {
     sm.connect();
 
     const onLobbyState = async (data: ServerPayloads[ServerEvents.LobbyState]) => {
+      console.log("onLobbyState", data);
       setLobbyState(data);
-      // Use history from react-router to navigate
-      window.history.pushState({}, '', `/?lobby=${data.lobbyId}`);
     };
 
     const onGameMessage = ({ color, message }: { color: string; message: string }) => {
@@ -43,6 +42,5 @@ export default function GameManager() {
   if (lobbyState === null) {
     return <MenuScreen sm={sm} />;
   }
-
   return <GameScreen sm={sm} lobbyState={lobbyState} />;
 }

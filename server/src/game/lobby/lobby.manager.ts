@@ -26,7 +26,7 @@ export class LobbyManager
 
   public createLobby(): Lobby
   {
-    let maxClients = 2;
+    let maxClients = 6;
 
     const lobby = new Lobby(this.server, maxClients);
 

@@ -26,23 +26,34 @@ const MenuScreen: React.FC<MenuProps> = ({
   };
 
   const onCreateLobby = () => {
+    if (!username.trim()) {
+      alert('Enter a valid username');
+      return;
+    }
     sm.emit({
       event: ClientEvents.LobbyCreate,
-      data: { username},
+      data: { 
+        username: username,
+      },
     });
   };
   
   const onJoinLobby = () => {
-    if (lobbyCode.trim()) {
-      sm.emit({
-        event: ClientEvents.LobbyJoin,
-        data: {
-          lobbyId: lobbyCode,
-        },
-      });
-    } else {
-      alert('Please enter a valid lobby code.');
+    if (!lobbyCode.trim()) {
+      alert('Enter a valid lobby code');
+      return;
     }
+    if (!username.trim()) {
+      alert('Enter a valid username');
+      return;
+    }
+    sm.emit({
+      event: ClientEvents.LobbyJoin,
+      data: {
+        lobbyId: lobbyCode,
+        username: username,
+      },
+    });
   };
 
   const containerStyle: React.CSSProperties = {
@@ -54,7 +65,6 @@ const MenuScreen: React.FC<MenuProps> = ({
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Update username while ensuring it doesn't exceed 10 characters
     if (e.target.value.length <= 10) {
       setUsername(e.target.value);
     }
@@ -68,7 +78,7 @@ const MenuScreen: React.FC<MenuProps> = ({
           placeholder="Enter name"
           value={username}
           onChange={handleUsernameChange}
-          maxLength={10} // Limits input to 10 characters
+          maxLength={10} 
         />
         <button onClick={onCreateLobby}>Create Game</button>
       </div>
@@ -83,7 +93,7 @@ const MenuScreen: React.FC<MenuProps> = ({
           placeholder="Enter name"
           value={username}
           onChange={handleUsernameChange}
-          maxLength={10} // Limits input to 10 characters
+          maxLength={10}
         />
         <input
           type="text"
