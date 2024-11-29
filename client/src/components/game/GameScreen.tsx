@@ -6,6 +6,7 @@ import { ClientEvents } from '@shared/ClientEvents'
 import { useLocation } from 'react-router-dom' 
 // import { emitEvent } from './utils/analytics'
 import { Themes } from './themes'
+import { Player } from '@shared/types'
 
 
 interface GameScreenProps {
@@ -19,7 +20,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
 }) => {
 
   
-  // console.log("lobbyState", lobbyState)
+  console.log("lobbyState", lobbyState)
 
   const [theme, setTheme] = useState(Themes.dark)
 
@@ -43,7 +44,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
         <br />
         {lobbyState.lobbyId}
         {lobbyState.players.map((player) => (
-          <div key={player}>{player}</div>
+          <div key={player.id}>{player.username}</div>
         ))}
 
     </div>

@@ -6,3 +6,8 @@ export type ServerExceptionResponse = {
   exception: SocketExceptions;
   message?: string | object;
 };
+
+export type Player = {
+  id: string
+  username: string;
+}

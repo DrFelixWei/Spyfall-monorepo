@@ -28,24 +28,26 @@ export class Lobby
     client.join(this.id);
     client.data.lobby = this;
 
-    this.instance.players.push(username);
+    this.instance.players.push({ id: client.id, username });
 
     this.dispatchLobbyState();
   }
 
   public removeClient(client: AuthenticatedSocket): void
   {
+    let usernameRemoved = this.instance.players.find(player => player.id === client.id)?.username;
+
     this.clients.delete(client.id);
     client.leave(this.id);
     client.data.lobby = null;
 
-    // If player leave then the game isn't worth to play anymore
-    this.instance.triggerFinish();
+    // Update players list in instance
+    this.instance.players = this.instance.players.filter(player => player.id !== client.id);
 
     // Alert the remaining player that client left lobby
     this.dispatchToLobby<ServerPayloads[ServerEvents.GameMessage]>(ServerEvents.GameMessage, {
       color: 'blue',
-      message: 'Opponent left lobby',
+      message: `${usernameRemoved} left the game!`,
     });
 
     this.dispatchLobbyState();

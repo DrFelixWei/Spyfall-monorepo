@@ -1,9 +1,10 @@
 import { ServerEvents } from './ServerEvents'
+import { Player } from './types'
 
 export type ServerPayloads = {
   [ServerEvents.LobbyState]: {
     lobbyId: string
-    players: string[]
+    players: Player[]
   }
 
   [ServerEvents.GameMessage]: {

@@ -4,6 +4,7 @@ import { ServerPayloads } from '@shared/ServerPayloads';
 import { ServerEvents } from '@shared/ServerEvents';
 import { SocketExceptions } from '@shared/SocketExceptions';
 import { ServerException } from '@app/game/server.exception';
+import { Player } from '@shared/types';
 
 export class Instance
 {
@@ -16,7 +17,7 @@ export class Instance
   // public scores: Record<Socket['id'], number> = {};
   // private cardsRevealedForCurrentRound: Record<number, Socket['id']> = {};
 
-  public players: string[] = [];
+  public players: Player[] = [];
 
   // public board: Board = new Board();
 
