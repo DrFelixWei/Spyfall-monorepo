@@ -7,7 +7,6 @@ import { ServerPayloads } from '@shared/ServerPayloads';
 
 export class Lobby
 {
-  public readonly id: string = v4();
 
   public readonly createdAt: Date = new Date();
 
@@ -18,6 +17,7 @@ export class Lobby
   constructor(
     private readonly server: Server,
     public readonly maxClients: number,
+    public readonly id: string,
   )
   {
   }

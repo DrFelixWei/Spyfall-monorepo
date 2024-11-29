@@ -25,11 +25,25 @@ export class LobbyManager
     client.data.lobby?.removeClient(client);
   }
 
+  private generateUniqueLobbyId(): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const idLength = 5;
+
+    let id: string;
+    do {
+      id = Array.from({ length: idLength }, () => 
+        characters[Math.floor(Math.random() * characters.length)]
+      ).join('');
+    } while (this.lobbies.has(id)); // Ensure the ID is unique
+
+    return id;
+  }
+
   public createLobby(client: AuthenticatedSocket, data: LobbyCreateDto): void
   {
     let maxClients = 8;
 
-    const lobby = new Lobby(this.server, maxClients);
+    const lobby = new Lobby(this.server, maxClients, this.generateUniqueLobbyId());
 
     this.lobbies.set(lobby.id, lobby);
 
@@ -37,13 +51,13 @@ export class LobbyManager
   }
 
   public getLobby(lobbyId: string) {
-    return this.lobbies.get(lobbyId);
+    return this.lobbies.get(lobbyId.trim().toUpperCase());
   }
 
   public joinLobby(client: AuthenticatedSocket, data: LobbyJoinDto): void
   {
     const lobbyId = data.lobbyId;
-    const lobby = this.lobbies.get(lobbyId);
+    const lobby = this.getLobby(lobbyId);
 
     if (!lobby) {
       throw new ServerException(SocketExceptions.LobbyError, 'Lobby not found');

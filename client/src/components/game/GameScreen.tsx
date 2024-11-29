@@ -40,7 +40,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
   return (
     <div>
         GAMESCREEN
-
+        <br />
         {lobbyState.lobbyId}
         {lobbyState.players.map((player) => (
           <div key={player}>{player}</div>
