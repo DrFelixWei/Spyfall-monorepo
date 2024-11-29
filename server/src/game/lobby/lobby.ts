@@ -22,15 +22,13 @@ export class Lobby
   {
   }
 
-  public addClient(client: AuthenticatedSocket): void
+  public addClient(client: AuthenticatedSocket, username: string): void
   {
     this.clients.set(client.id, client);
     client.join(this.id);
     client.data.lobby = this;
 
-    if (this.clients.size >= this.maxClients) {
-      this.instance.triggerStart();
-    }
+    this.instance.players.push(username);
 
     this.dispatchLobbyState();
   }

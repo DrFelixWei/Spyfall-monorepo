@@ -11,6 +11,9 @@ export class LobbyJoinDto
 {
   @IsString()
   lobbyId: string;
+
+  @IsString()
+  username: string;
 }
 
 // export class GameMovePieceDto

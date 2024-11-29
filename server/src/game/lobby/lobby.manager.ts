@@ -6,6 +6,7 @@ import { SocketExceptions } from '@shared/SocketExceptions';
 import { ServerEvents } from '@shared/ServerEvents';
 import { ServerPayloads } from '@shared/ServerPayloads';
 import { LOBBY_MAX_LIFETIME } from '@app/game/constants';
+import { LobbyCreateDto, LobbyJoinDto } from '../dtos';
 // import { Cron } from '@nestjs/schedule';
 
 export class LobbyManager
@@ -24,7 +25,7 @@ export class LobbyManager
     client.data.lobby?.removeClient(client);
   }
 
-  public createLobby(): Lobby
+  public createLobby(client: AuthenticatedSocket, data: LobbyCreateDto): void
   {
     let maxClients = 8;
 
@@ -32,15 +33,16 @@ export class LobbyManager
 
     this.lobbies.set(lobby.id, lobby);
 
-    return lobby;
+    lobby.addClient(client, data.username);
   }
 
   public getLobby(lobbyId: string) {
     return this.lobbies.get(lobbyId);
   }
 
-  public joinLobby(lobbyId: string, client: AuthenticatedSocket): void
+  public joinLobby(client: AuthenticatedSocket, data: LobbyJoinDto): void
   {
+    const lobbyId = data.lobbyId;
     const lobby = this.lobbies.get(lobbyId);
 
     if (!lobby) {
@@ -51,7 +53,7 @@ export class LobbyManager
       throw new ServerException(SocketExceptions.LobbyError, 'Lobby already full');
     }
 
-    lobby.addClient(client);
+    lobby.addClient(client, data.username);
   }
 
   // Periodically clean up lobbies

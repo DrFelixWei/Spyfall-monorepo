@@ -61,27 +61,34 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage(ClientEvents.LobbyCreate)
   onLobbyCreate(client: AuthenticatedSocket, data: LobbyCreateDto): WsResponse<ServerPayloads[ServerEvents.GameMessage]>
   {
-    const lobby = this.lobbyManager.createLobby();
-    lobby.addClient(client);
-
+    this.lobbyManager.createLobby(client, data);
     return {
       event: ServerEvents.GameMessage,
       data: {
         color: 'green',
-        message: 'Lobby created',
+        message: 'Lobby created!',
       },
     };
   }
 
   @SubscribeMessage(ClientEvents.LobbyJoin)
-  onLobbyJoin(client: AuthenticatedSocket, data: LobbyJoinDto): void
+  onLobbyJoin(client: AuthenticatedSocket, data: LobbyJoinDto): WsResponse<ServerPayloads[ServerEvents.GameMessage]>
   {
-    this.lobbyManager.joinLobby(data.lobbyId, client);
+    this.lobbyManager.joinLobby(client, data);
+    let username = data.username;
+    return {
+      event: ServerEvents.GameMessage,
+      data: {
+        color: 'green',
+        message: `${username} joined!`,
+      },
+    };
   }
 
   @SubscribeMessage(ClientEvents.LobbyLeave)
   onLobbyLeave(client: AuthenticatedSocket): void
   {
+    // this.lobbyManager.leaveLobby(client);
     client.data.lobby?.removeClient(client);
   }
 
