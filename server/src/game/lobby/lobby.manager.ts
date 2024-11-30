@@ -22,6 +22,7 @@ export class LobbyManager
 
   public terminateSocket(client: AuthenticatedSocket): void
   {
+    console.log("disconnecting ", client.id)
     client.data.lobby?.removeClient(client);
   }
 
@@ -41,9 +42,7 @@ export class LobbyManager
 
   public createLobby(client: AuthenticatedSocket, data: LobbyCreateDto): void
   {
-    let maxClients = 8;
-
-    const lobby = new Lobby(this.server, maxClients, this.generateUniqueLobbyId());
+    const lobby = new Lobby(this.server, this.generateUniqueLobbyId());
 
     this.lobbies.set(lobby.id, lobby);
 

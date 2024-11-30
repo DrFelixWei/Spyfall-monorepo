@@ -5,35 +5,37 @@ import { ServerEvents } from '@shared/ServerEvents';
 import { SocketExceptions } from '@shared/SocketExceptions';
 import { ServerException } from '@app/game/server.exception';
 import { Player } from '@shared/types';
+import { locations_1, locations_2 } from '@shared/Locations';
 
 export class Instance
 {
-  public hasStarted: boolean = false;
-
-  public hasFinished: boolean = false;
-
-  public isSuspended: boolean = false;
-
-  // public scores: Record<Socket['id'], number> = {};
-  // private cardsRevealedForCurrentRound: Record<number, Socket['id']> = {};
-
   public players: Player[] = [];
-
-  // public board: Board = new Board();
+  public hasStarted: boolean = false;
+  public hasFinished: boolean = false;
+  public timer: number = 600000; // 10 minutes
+  public locations_type: number = 1;
+  public location: string = '';
+  public roles: string[] = [];
 
   constructor(
-    private readonly lobby: Lobby,
+    private readonly lobby: Lobby, // circular dependency to use lobby for triggering dispatching state
   )
   {
-    // this.initializeBoard();
+    // this.initializeRound();
   }
 
-  public triggerStart(): void
+  public triggerStart(minClients: number): void
   {
     if (this.hasStarted) {
       return;
     }
 
+    if (this.players.length < minClients) {
+      return;
+      // throw new ServerException(SocketExceptions.NotEnoughPlayers);
+    }
+
+    this.initializeRound();
     this.hasStarted = true;
 
     this.lobby.dispatchToLobby<ServerPayloads[ServerEvents.GameMessage]>(ServerEvents.GameMessage, {
@@ -56,8 +58,31 @@ export class Instance
     });
   }
 
+  public initializeRound(): void
+  {
+    console.log('initializing round');
+    // Assign location
+    const locations = (() => {
+      switch (this.locations_type) {
+        case 1:
+          return locations_1;
+        case 2:
+          return locations_2;
+        default:
+          return locations_1;
+      }
+    })();
 
+    const location = locations[Math.floor(Math.random() * locations.length)];
+    this.location = location.name;
+    this.roles = location.roles;
 
-
+    // Assign players roles including spy
+    let rolesPlusSpy = this.roles.concat(['spy']);
+    let spyIndex = Math.floor(Math.random() * this.players.length); 
+    this.players.forEach((player, index) => {
+      player.role = index === spyIndex ? 'spy' : rolesPlusSpy.pop();
+    });
+  }
   
 }

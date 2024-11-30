@@ -10,4 +10,7 @@ export type ServerExceptionResponse = {
 export type Player = {
   id: string
   username: string;
+
+  role?: string; 
+  vote?: string; // the id of another player
 }

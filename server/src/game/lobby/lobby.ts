@@ -14,9 +14,11 @@ export class Lobby
 
   public readonly instance: Instance = new Instance(this);
 
+  public readonly minClients: number = 3;
+  public readonly maxClients: number = 8;
+
   constructor(
     private readonly server: Server,
-    public readonly maxClients: number,
     public readonly id: string,
   )
   {
@@ -53,22 +55,29 @@ export class Lobby
     this.dispatchLobbyState();
   }
 
+  public startGame(): void
+  {
+    this.instance.triggerStart(this.minClients);
+    this.dispatchLobbyState();
+  }
+
+
   public dispatchLobbyState(): void
   {
-    // console.log("this.clients:", this.clients)
+    console.log('dispatching lobby state');
     const payload: ServerPayloads[ServerEvents.LobbyState] = {
       lobbyId: this.id,
       players: this.instance.players,
-      // turn: this.instance.turn,
-      // board: this.instance.board,
-      // mode: this.maxClients === 1 ? 'solo' : 'duo',
+      hasStarted: this.instance.hasStarted,
+      hasFinished: this.instance.hasFinished,
+
+      location: this.instance.location,
+
       // delayBetweenRounds: this.instance.delayBetweenRounds,
-      // hasStarted: this.instance.hasStarted,
-      // hasFinished: this.instance.hasFinished,
-      // currentRound: this.instance.currentRound,
-      // playersCount: this.clients.size,
-      // cards: this.instance.cards.map(card => card.toDefinition()),
       // isSuspended: this.instance.isSuspended,
+
+      // currentRound: this.instance.currentRound,
+      // cards: this.instance.cards.map(card => card.toDefinition()),
       // scores: this.instance.scores,
     };
 

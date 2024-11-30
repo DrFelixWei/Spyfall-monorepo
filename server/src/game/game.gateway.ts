@@ -92,6 +92,12 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     client.data.lobby?.removeClient(client);
   }
 
+  @SubscribeMessage(ClientEvents.GameStart)
+  onGameStart(client: AuthenticatedSocket): void
+  {
+    client.data.lobby?.startGame();
+  }
+
 
   // @SubscribeMessage(ClientEvents.GameMovePiece)
   // onGameMovePiece(

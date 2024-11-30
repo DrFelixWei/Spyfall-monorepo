@@ -27,7 +27,8 @@ export default function GameManager() {
     };
 
     const onGameMessage = ({ color, message }: { color: string; message: string }) => {
-      console.log(message);
+      // TO DO - Implement game message handling
+      console.log(message); 
     };
 
     sm.registerListener(ServerEvents.LobbyState, onLobbyState);

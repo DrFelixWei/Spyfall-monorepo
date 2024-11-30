@@ -16,6 +16,24 @@ export class LobbyJoinDto
   username: string;
 }
 
+export class GameStartDto
+{
+  // @IsString()
+  // lobbyId: string;
+}
+
+export class GameVoteDto
+{
+  // @IsString()
+  // lobbyId: string;
+
+  @IsString()
+  voterPlayerId: string;  
+
+  @IsString()
+  targetPlayerId: string;  
+}
+
 // export class GameMovePieceDto
 // {
 //   lobbyId: string;

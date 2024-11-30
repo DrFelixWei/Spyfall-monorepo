@@ -37,6 +37,7 @@ export default class SocketManager {
 
   emit<T>(options: EmitOptions<T>): this {
     this.socket.emit(options.event, options.data)
+    console.log("emitted", options.event, options.data)
     return this
   }
 
@@ -58,6 +59,7 @@ export default class SocketManager {
 
   registerListener<T>(event: ServerEvents, listener: Listener<T>): this {
     this.socket.on(event, listener)
+    console.log("registered", event)
     return this
   }
 

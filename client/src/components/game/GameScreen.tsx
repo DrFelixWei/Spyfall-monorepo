@@ -8,7 +8,6 @@ import { useLocation } from 'react-router-dom'
 import { Themes } from './themes'
 import { Player } from '@shared/types'
 
-
 interface GameScreenProps {
   sm: ReturnType<typeof useSocketManager>['sm']; 
   lobbyState: ServerPayloads[ServerEvents.LobbyState];
@@ -19,10 +18,25 @@ const GameScreen: React.FC<GameScreenProps> = ({
   lobbyState 
 }) => {
 
+  const MIN_PLAYERS = 3
+  const MAX_PLAYERS = 8
+
   
   console.log("lobbyState", lobbyState)
 
   const [theme, setTheme] = useState(Themes.dark)
+
+  const onStartGame = () => {
+
+    // if (lobbyState.players.length < MIN_PLAYERS) {
+    //   alert('Not enough players');
+    //   return;
+    // }
+
+    sm.emit({
+      event: ClientEvents.GameStart,
+    });
+  };
 
   // const board = lobbyState?.board
 
@@ -46,6 +60,10 @@ const GameScreen: React.FC<GameScreenProps> = ({
         {lobbyState.players.map((player) => (
           <div key={player.id}>{player.username}</div>
         ))}
+
+
+        <button onClick={onStartGame}>Start</button>
+
 
     </div>
   )
