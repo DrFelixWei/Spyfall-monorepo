@@ -7,8 +7,8 @@ export type ServerPayloads = {
     players: Player[]
     hasStarted: boolean;
     hasFinished: boolean;
-    
     location?: string;
+    locations?: string[];
     roles?: string[];
     time?: number; // time left in seconds
   }

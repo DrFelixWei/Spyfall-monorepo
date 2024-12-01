@@ -69,8 +69,8 @@ export class Lobby
       players: this.instance.players,
       hasStarted: this.instance.hasStarted,
       hasFinished: this.instance.hasFinished,
-
       location: this.instance.location,
+      locations: this.instance.locations,
       roles: this.instance.roles,
 
       // delayBetweenRounds: this.instance.delayBetweenRounds,

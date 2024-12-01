@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 // import { emitEvent } from './utils/analytics'
 import { Themes } from './themes'
 import { Player } from '@shared/types'
+import GameUI from './GameUI'
 
 interface GameScreenProps {
   sm: ReturnType<typeof useSocketManager>['sm']; 
@@ -24,33 +25,26 @@ const GameScreen: React.FC<GameScreenProps> = ({
   
   console.log("lobbyState", lobbyState)
 
-  const [theme, setTheme] = useState(Themes.dark)
-
   const onStartGame = () => {
 
-    // if (lobbyState.players.length < MIN_PLAYERS) {
-    //   alert('Not enough players');
-    //   return;
-    // }
+    if (lobbyState.players.length < MIN_PLAYERS) {
+      alert('Not enough players');
+      return;
+    }
 
     sm.emit({
       event: ClientEvents.GameStart,
     });
   };
 
-  // const board = lobbyState?.board
 
-
-  
-  // Receive game state from server
-
-  
-  // Send game state to server
-
-
-  // Render game state
-
-  
+  if (lobbyState.hasStarted) {
+    return (
+      <div>
+        <GameUI lobbyState={lobbyState} />
+      </div>
+    )
+  }
 
   return (
     <div>

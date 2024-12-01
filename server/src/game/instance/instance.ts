@@ -14,6 +14,7 @@ export class Instance
   public hasFinished: boolean = false;
   public timer: number = 600000; // 10 minutes
   public locations_type: number = 1;
+  public locations: string[] = [];
   public location: string = '';
   public roles: string[] = [];
 
@@ -71,7 +72,7 @@ export class Instance
           return locations_1;
       }
     })();
-  
+    this.locations = locations.map(location => location.name);
     const location = locations[Math.floor(Math.random() * locations.length)];
     this.location = location.name;
     this.roles = location.roles;
