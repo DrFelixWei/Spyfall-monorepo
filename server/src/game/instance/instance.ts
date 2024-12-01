@@ -58,8 +58,7 @@ export class Instance
     });
   }
 
-  public initializeRound(): void
-  {
+  public initializeRound(): void {
     console.log('initializing round');
     // Assign location
     const locations = (() => {
@@ -72,17 +71,24 @@ export class Instance
           return locations_1;
       }
     })();
-
+  
     const location = locations[Math.floor(Math.random() * locations.length)];
     this.location = location.name;
     this.roles = location.roles;
-
+  
     // Assign players roles including spy
-    let rolesPlusSpy = this.roles.concat(['spy']);
-    let spyIndex = Math.floor(Math.random() * this.players.length); 
+    const rolesPlusSpy = [...this.roles];
+    const spyIndex = Math.floor(Math.random() * this.players.length);
     this.players.forEach((player, index) => {
-      player.role = index === spyIndex ? 'spy' : rolesPlusSpy.pop();
+      if (index === spyIndex) {
+        player.role = 'spy';
+      } else {
+        // Shuffle and assign the remaining roles
+        const roleIndex = Math.floor(Math.random() * rolesPlusSpy.length);
+        player.role = rolesPlusSpy.splice(roleIndex, 1)[0];
+      }
     });
   }
+  
   
 }

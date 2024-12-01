@@ -9,6 +9,7 @@ export type ServerPayloads = {
     hasFinished: boolean;
     
     location?: string;
+    roles?: string[];
     time?: number; // time left in seconds
   }
 

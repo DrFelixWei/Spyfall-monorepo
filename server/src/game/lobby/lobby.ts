@@ -71,6 +71,7 @@ export class Lobby
       hasFinished: this.instance.hasFinished,
 
       location: this.instance.location,
+      roles: this.instance.roles,
 
       // delayBetweenRounds: this.instance.delayBetweenRounds,
       // isSuspended: this.instance.isSuspended,
