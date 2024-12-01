@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Grid, Card, CardContent, Typography, Button } from "@mui/material";
+import { Box, Card, CardContent, Typography, Button } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import type { ServerPayloads } from "@shared/ServerPayloads";
 import { ServerEvents } from "@shared/ServerEvents";
 
@@ -53,8 +54,8 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
         </Typography>
         <Grid container spacing={2}>
           {players.map((player, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
               <Card
+                key={index}
                 onClick={handleVoteClick}
                 sx={{
                   display: "flex",
@@ -66,7 +67,6 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
               >
                 <Typography variant="body1">{player}</Typography>
               </Card>
-            </Grid>
           ))}
         </Grid>
       </Box>
@@ -78,16 +78,15 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
         </Typography>
         <Grid container spacing={2} columns={{ xs: 1, sm: 2, md: 3 }}>
           {locations!!.map((loc, index) => (
-            <Grid item xs={1} key={index}>
               <Card
-                sx={{ cursor: "pointer", textAlign: "center" }}
+                key={index}
+                sx={{ cursor: "pointer", textAlign: "center", paddingTop: 0, paddingBottom: 0 }}
                 onClick={handleLocationClick}
               >
                 <CardContent sx={{ paddingTop: 0, paddingBottom: 0 }}>
                   <Typography variant="body2">{loc}</Typography>
                 </CardContent>
               </Card>
-            </Grid>
           ))}
         </Grid>
       </Box>
