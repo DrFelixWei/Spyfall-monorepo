@@ -7,26 +7,21 @@ import { ServerException } from '@app/game/server.exception';
 import { Player } from '@shared/types';
 import { locations_1, locations_2 } from '@shared/Locations';
 
-export class Instance
-{
+export class Instance {
   public players: Player[] = [];
   public hasStarted: boolean = false;
   public hasFinished: boolean = false;
-  public timer: number = 600000; // 10 minutes
+  public timer: number = 600000; // 10 minutes in milliseconds
+  private timerInterval: NodeJS.Timeout | null = null; // To hold the interval ID
+
   public locations_type: number = 1;
   public locations: string[] = [];
   public location: string = '';
   public roles: string[] = [];
 
-  constructor(
-    private readonly lobby: Lobby, // circular dependency to use lobby for triggering dispatching state
-  )
-  {
-    // this.initializeRound();
-  }
+  constructor(private readonly lobby: Lobby) {}
 
-  public triggerStart(minClients: number): void
-  {
+  public triggerStart(minClients: number): void {
     if (this.hasStarted) {
       return;
     }
@@ -39,24 +34,44 @@ export class Instance
     this.initializeRound();
     this.hasStarted = true;
 
+    // Start the timer
+    this.startTimer();
+
     this.lobby.dispatchToLobby<ServerPayloads[ServerEvents.GameMessage]>(ServerEvents.GameMessage, {
       color: 'blue',
-      message: 'Game started !',
+      message: 'Game started!',
     });
   }
 
-  public triggerFinish(): void
-  {
+  public triggerFinish(): void {
     if (this.hasFinished || !this.hasStarted) {
       return;
     }
 
     this.hasFinished = true;
 
+    // Stop the timer
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
+    this.lobby.dispatchLobbyState();
     this.lobby.dispatchToLobby<ServerPayloads[ServerEvents.GameMessage]>(ServerEvents.GameMessage, {
       color: 'blue',
-      message: 'Game finished !',
+      message: 'Game finished!',
     });
+  }
+
+  private startTimer(): void {
+    this.timerInterval = setInterval(() => {
+      if (this.timer > 0) {
+        this.timer -= 1000; // Decrease by 1 second
+        this.lobby.dispatchLobbyState();
+      } else {
+        this.triggerFinish();
+      }
+    }, 1000);
   }
 
   public initializeRound(): void {
@@ -76,7 +91,7 @@ export class Instance
     const location = locations[Math.floor(Math.random() * locations.length)];
     this.location = location.name;
     this.roles = location.roles;
-  
+
     // Assign players roles including spy
     const rolesPlusSpy = [...this.roles];
     const spyIndex = Math.floor(Math.random() * this.players.length);
@@ -90,6 +105,4 @@ export class Instance
       }
     });
   }
-  
-  
 }

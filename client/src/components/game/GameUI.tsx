@@ -15,6 +15,7 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
   const myId = localStorage.getItem("spyfall_myId"); // a string
   const myRole = lobbyState.players.find((player) => player.id === myId)?.role; // a string
   const players = lobbyState.players.map((player) => player.username); // a string array
+  const time = lobbyState.time; // a number, milliseconds
 
   const handleLocationClick = () => {
     // to do - toggle strikethrough font style
@@ -34,6 +35,12 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
     maxWidth: '60vw',
   };
 
+  const formatTime = (ms: number) => {
+    const seconds = Math.floor((ms / 1000) % 60);
+    const minutes = Math.floor((ms / 1000 / 60) % 60);
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+
   return (
     <div style={containerStyle}>
     <Box sx={{ p: 3, backgroundColor: "background.default", color: "text.primary" }}>
@@ -44,6 +51,13 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
           Your Role: {myRole || "N/A"}
+        </Typography>
+      </Box>
+
+      {/* Timer display */}
+      <Box textAlign="center" mb={2}>
+        <Typography variant="h6" fontWeight="bold">
+          Time Left: {formatTime(time!!)}
         </Typography>
       </Box>
 

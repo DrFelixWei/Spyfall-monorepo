@@ -72,13 +72,7 @@ export class Lobby
       location: this.instance.location,
       locations: this.instance.locations,
       roles: this.instance.roles,
-
-      // delayBetweenRounds: this.instance.delayBetweenRounds,
-      // isSuspended: this.instance.isSuspended,
-
-      // currentRound: this.instance.currentRound,
-      // cards: this.instance.cards.map(card => card.toDefinition()),
-      // scores: this.instance.scores,
+      time: this.instance.timer,
     };
 
     this.dispatchToLobby(ServerEvents.LobbyState, payload);
