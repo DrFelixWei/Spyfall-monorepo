@@ -60,6 +60,11 @@ export class Lobby
     this.dispatchLobbyState();
   }
 
+  public endGame(): void
+  {
+    this.instance.resetGame();
+  }
+
 
   public dispatchLobbyState(): void
   {

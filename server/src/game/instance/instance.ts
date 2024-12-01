@@ -19,7 +19,24 @@ export class Instance {
   public location: string = '';
   public roles: string[] = [];
 
-  constructor(private readonly lobby: Lobby) {}
+  constructor(private readonly lobby: Lobby) {
+    console.log("Instance created");
+  }
+
+  public resetGame(): void {
+    this.players.forEach(player => {
+      player.role = '';
+      player.vote = '';
+    });
+    this.hasStarted = false;
+    this.hasFinished = false;
+    this.timer = 60000;
+    this.location = '';
+    this.roles = [];
+
+    this.lobby.dispatchLobbyState();
+  }
+  
 
   public triggerStart(minClients: number): void {
     if (this.hasStarted) {
@@ -27,11 +44,10 @@ export class Instance {
     }
 
     if (this.players.length < minClients) {
-      return;
-      // throw new ServerException(SocketExceptions.NotEnoughPlayers);
+      throw new ServerException(SocketExceptions.GameError, 'Not enough players to start the game');
     }
 
-    this.initializeRound();
+    this.initializeGame();
     this.hasStarted = true;
 
     // Start the timer
@@ -74,8 +90,7 @@ export class Instance {
     }, 1000);
   }
 
-  public initializeRound(): void {
-    console.log('initializing round');
+  public initializeGame(): void {
     // Assign location
     const locations = (() => {
       switch (this.locations_type) {

@@ -72,26 +72,4 @@ export class LobbyManager
 
     lobby.addClient(client, data.username);
   }
-
-  // Periodically clean up lobbies
-  // @Cron('*/5 * * * *')
-  // private lobbiesCleaner(): void
-  // {
-  //   for (const [lobbyId, lobby] of this.lobbies) {
-  //     const now = (new Date()).getTime();
-  //     const lobbyCreatedAt = lobby.createdAt.getTime();
-  //     const lobbyLifetime = now - lobbyCreatedAt;
-
-  //     if (lobbyLifetime > LOBBY_MAX_LIFETIME) {
-  //       lobby.dispatchToLobby<ServerPayloads[ServerEvents.GameMessage]>(ServerEvents.GameMessage, {
-  //         color: 'blue',
-  //         message: 'Game timed out',
-  //       });
-
-  //       lobby.instance.triggerFinish();
-
-  //       this.lobbies.delete(lobby.id);
-  //     }
-  //   }
-  // }
 }

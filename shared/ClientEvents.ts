@@ -10,5 +10,6 @@ export enum ClientEvents
 
   // Game
   GameStart = 'client.game.start',
+  GameEnd = 'client.game.finish',
   GameVote = 'client.game.vote',
 }

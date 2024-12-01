@@ -4,7 +4,7 @@ import { ServerEvents } from '@shared/ServerEvents';
 import type { ServerPayloads } from '@shared/ServerPayloads';
 import { ClientEvents } from '@shared/ClientEvents';
 import { useLocation } from 'react-router-dom';
-import { Box, Typography, Button, Grid, IconButton } from "@mui/material";
+import { Box, Typography, Button, Grid, IconButton, Modal } from "@mui/material";
 import KickIcon from '@mui/icons-material/Close'; 
 import GameUI from './GameUI';
 
@@ -25,20 +25,77 @@ const GameScreen: React.FC<GameScreenProps> = ({ sm, lobbyState }) => {
       alert('Not enough players');
       return;
     }
-
+    console.log('Starting game');
     sm.emit({
       event: ClientEvents.GameStart,
     });
   };
+
+  const onEndGame = () => {
+    console.log('Ending game');
+    sm.emit({
+      event: ClientEvents.GameEnd,
+    });
+  }
 
   const handleKickPlayer = (playerId: string) => {
     // Implement player kicking logic
     console.log(`Kicking player: ${playerId}`);
   };
 
+  const [openModal, setOpenModal] = useState(false);
+  useEffect(() => {
+    if (lobbyState.hasFinished) {
+      setOpenModal(true);
+    }
+  }, [lobbyState.hasFinished]);
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const [spy, setSpy] = useState<string | null>(null);
+  useEffect(() => {
+    const spy = lobbyState.players.find(player => player.role === 'spy')?.username || null;
+    setSpy(spy);
+  }, [lobbyState.hasStarted]);
+
   if (lobbyState.hasStarted) {
     return (
       <div>
+        <Modal
+          open={openModal} // Control modal visibility with state
+          onClose={handleCloseModal}
+          aria-labelledby="game-over-title"
+          aria-describedby="game-over-description"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              backgroundColor: 'white',
+              padding: 4,
+              borderRadius: 2,
+              boxShadow: 3,
+            }}
+          >
+            <Typography variant="h3" textAlign="center">Game Over</Typography>
+
+            <Typography variant="h6" textAlign="center">{spy} was the Spy!</Typography>
+
+            <Button variant="contained" color="primary" sx={{ marginTop: 2 }}
+                    onClick={() => {
+                      handleCloseModal();
+                      onEndGame();
+                    }}
+            >
+              Start New Game
+            </Button>
+          </Box>
+        </Modal>
+
         <GameUI lobbyState={lobbyState} />
       </div>
     );
