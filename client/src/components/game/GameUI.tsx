@@ -17,11 +17,11 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
   const players = lobbyState.players.map((player) => player.username); // a string array
 
   const handleLocationClick = () => {
-    // Empty function for location card click
+    // to do - toggle strikethrough font style
   };
 
   const handleVoteClick = () => {
-    // Empty function for voting
+    // to do - implement voting logic
   };
 
 
@@ -40,17 +40,17 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
       {/* Location display */}
       <Box textAlign="center" mb={2}>
         <Typography variant="h4" fontWeight="bold">
-          {myRole === "Spy" ? "???" : location}
+          {myRole === "spy" ? "???" : location}
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
           Your Role: {myRole || "N/A"}
         </Typography>
       </Box>
 
-            {/* Players voting panel */}
-            <Box>
+        {/* Players voting panel */}
+        <Box>
         <Typography variant="h6" mb={1}>
-          Vote for a Player
+          Players
         </Typography>
         <Grid container spacing={2}>
           {players.map((player, index) => (
@@ -62,7 +62,7 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
                   justifyContent: "space-between",
                   alignItems: "center",
                   cursor: "pointer",
-                  p: 2,
+                  p: 1,
                 }}
               >
                 <Typography variant="body1">{player}</Typography>
@@ -80,12 +80,13 @@ const GameUI: React.FC<GameUIProps> = ({ lobbyState }) => {
           {locations!!.map((loc, index) => (
               <Card
                 key={index}
+                variant="outlined"
                 sx={{ cursor: "pointer", textAlign: "center", paddingTop: 0, paddingBottom: 0 }}
                 onClick={handleLocationClick}
               >
-                <CardContent sx={{ paddingTop: 0, paddingBottom: 0 }}>
-                  <Typography variant="body2">{loc}</Typography>
-                </CardContent>
+                {/* <CardContent sx={{ paddingTop: 0, paddingBottom: 0 }}> */}
+                  <Typography variant="body2" sx={{ padding: 0.5 }}>{loc}</Typography>
+                {/* </CardContent> */}
               </Card>
           ))}
         </Grid>
