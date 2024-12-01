@@ -12,6 +12,10 @@ export type ServerPayloads = {
     time?: number; // time left in seconds
   }
 
+  [ServerEvents.UserState]: {
+    id: string
+  }
+
   [ServerEvents.GameMessage]: {
     message: string
     color?: 'green' | 'red' | 'blue' | 'orange'

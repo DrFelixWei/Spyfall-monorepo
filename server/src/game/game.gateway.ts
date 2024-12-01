@@ -58,10 +58,18 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     });
   }
 
+  private sendClientId(client: AuthenticatedSocket): void
+  {
+    client.emit(ServerEvents.UserState, {
+      id: client.id,
+    });
+  }
+
   @SubscribeMessage(ClientEvents.LobbyCreate)
   onLobbyCreate(client: AuthenticatedSocket, data: LobbyCreateDto): WsResponse<ServerPayloads[ServerEvents.GameMessage]>
   {
     this.lobbyManager.createLobby(client, data);
+    this.sendClientId(client);
     return {
       event: ServerEvents.GameMessage,
       data: {
@@ -76,6 +84,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   {
     this.lobbyManager.joinLobby(client, data);
     let username = data.username;
+    this.sendClientId(client);
     return {
       event: ServerEvents.GameMessage,
       data: {
@@ -97,28 +106,6 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   {
     client.data.lobby?.startGame();
   }
-
-
-  // @SubscribeMessage(ClientEvents.GameMovePiece)
-  // onGameMovePiece(
-  //   client: AuthenticatedSocket,
-  //   data: GameMovePieceDto,
-  // ): void 
-  // {
-  //   try {
-  //     const lobby = this.lobbyManager.getLobby(data.lobbyId);
-  //     if (!lobby) {
-  //       throw new ServerException(SocketExceptions.LobbyError);
-  //     }
-  
-  //     lobby.instance.handleMovePiece(data);
-  //   } catch (error) {
-  //     if (error instanceof ServerException) {
-  //       // notify client about lost connection
-  //     }
-  //   }
-
-  // }
 
 
 }

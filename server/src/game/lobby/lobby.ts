@@ -31,7 +31,6 @@ export class Lobby
     client.data.lobby = this;
 
     this.instance.players.push({ id: client.id, username });
-
     this.dispatchLobbyState();
   }
 

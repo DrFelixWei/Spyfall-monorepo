@@ -5,6 +5,7 @@ export enum ServerEvents
 
   // Lobby
   LobbyState = 'server.lobby.state',
+  UserState = 'server.user.state',
 
   // Game
   GameMessage = 'server.game.message',

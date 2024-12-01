@@ -26,16 +26,22 @@ export default function GameManager() {
       setLobbyState(data);
     };
 
+    const onUserState = async (data: ServerPayloads[ServerEvents.UserState]) => {
+      localStorage.setItem('spyfall_myId', data.id); // SAVE USER ID TO LOCAL STORAGE
+    }
+
     const onGameMessage = ({ color, message }: { color: string; message: string }) => {
       // TO DO - Implement game message handling
       console.log(message); 
     };
 
     sm.registerListener(ServerEvents.LobbyState, onLobbyState);
+    sm.registerListener(ServerEvents.UserState, onUserState);
     sm.registerListener(ServerEvents.GameMessage, onGameMessage);
 
     return () => {
       sm.removeListener(ServerEvents.LobbyState, onLobbyState);
+      sm.removeListener(ServerEvents.UserState, onUserState);
       sm.removeListener(ServerEvents.GameMessage, onGameMessage);
     };
   }, [sm, setLobbyState]);
