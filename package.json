@@ -1,8 +1,22 @@
 {
-    "name": "monorepo",
+    "name": "spyfall-monorepo",
     "private": true,
+    "version": "1.0.0",
+    "author": "Felix Wei",
+    "license": "",
+    "workspaces": {
+      "packages": [
+        "client/*",
+        "server/*",
+        "shared/*"
+      ]
+    },
     "scripts": {
-      "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\""
+      "start": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+      "start:dev:client": "npm run dev --prefix client",
+      "start:dev:server": "npm run dev --prefix server",
+      "start:prod:client": "npm workspace @spyfall/client start:prod",
+      "start:prod:server": "npm workspace @spyfall/server start:prod"
     }
   }
   
