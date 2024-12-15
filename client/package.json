@@ -1,16 +1,17 @@
 {
-  "name": "spyfall-frontend",
+  "name": "@spyfall/server",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prod": ""
   },
   "dependencies": {
-    "@shared": "file:../shared",
+    "@spyfall/shared": "*",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.2",
