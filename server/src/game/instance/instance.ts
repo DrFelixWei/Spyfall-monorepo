@@ -5,7 +5,7 @@ import { ServerEvents } from '@shared/ServerEvents';
 import { SocketExceptions } from '@shared/SocketExceptions';
 import { ServerException } from '@app/game/server.exception';
 import { Player } from '@shared/types';
-import { locations_1, locations_2 } from '@shared/Locations';
+import { locations_1, locations_2 } from '@shared/locations';
 
 export class Instance {
   public players: Player[] = [];
