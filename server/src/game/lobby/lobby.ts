@@ -83,17 +83,21 @@ export class Lobby
 
   public endGame(): void
   {
-    this.instance.resetGame();
+    this.instance.triggerGameOver();
   }
 
+  public resetGame(): void
+  {
+    this.instance.resetGame();
+  }
 
   public dispatchLobbyState(): void
   {
     const payload: ServerPayloads[ServerEvents.LobbyState] = {
       lobbyId: this.id,
       players: this.instance.players,
-      hasStarted: this.instance.hasStarted,
-      hasFinished: this.instance.hasFinished,
+      gameStarted: this.instance.gameStarted,
+      gameOver: this.instance.gameOver,
       location: this.instance.location,
       locations: this.instance.locations,
       roles: this.instance.roles,

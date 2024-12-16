@@ -70,7 +70,7 @@ export default function GameManager() {
 
       {currentScreen === 'menu' && <MenuScreen sm={sm} />}
       {currentScreen === 'lobby' && lobbyState !== null && <LobbyScreen sm={sm} lobbyState={lobbyState} setCurrentScreen={setCurrentScreen} />}
-      {/* {currentScreen === 'game' && lobbyState !==null && <GameScreen lobbyState={lobbyState} />} */}  {/* TODO: refactor so that gamescreen is navigated to from game manager instead of contained in lobbyscreen */}
+      {currentScreen === 'game' && lobbyState !==null && <GameScreen sm={sm} lobbyState={lobbyState} setCurrentScreen={setCurrentScreen} />}  
     </>
   )
 }

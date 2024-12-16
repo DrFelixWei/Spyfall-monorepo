@@ -5,8 +5,8 @@ export type ServerPayloads = {
   [ServerEvents.LobbyState]: {
     lobbyId: string
     players: Player[]
-    hasStarted: boolean;
-    hasFinished: boolean;
+    gameStarted: boolean;
+    gameOver: boolean;
     location?: string;
     locations?: string[];
     roles?: string[];

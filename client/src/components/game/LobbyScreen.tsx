@@ -3,11 +3,9 @@ import { useSocketManager } from '../../hooks/useSocketManager';
 import { ServerEvents } from '@shared/ServerEvents';
 import type { ServerPayloads } from '@shared/ServerPayloads';
 import { ClientEvents } from '@shared/ClientEvents';
-import { useLocation } from 'react-router-dom';
-import { Box, Typography, Button, Grid, IconButton, Modal } from "@mui/material";
+import { Box, Typography, Button, Grid, IconButton } from "@mui/material";
 import KickIcon from '@mui/icons-material/Close'; 
 import EditIcon from '@mui/icons-material/Edit';
-import GameScreen from './GameScreen';
 
 interface LobbyScreenProps {
   sm: ReturnType<typeof useSocketManager>['sm']; 
@@ -19,26 +17,6 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, setCurrentScr
 
   const MIN_PLAYERS = 3;
   const MAX_PLAYERS = 8;
-
-  console.log("lobbyState", lobbyState);
-
-  const onStartGame = () => {
-    if (lobbyState.players.length < MIN_PLAYERS) {
-      alert('Not enough players');
-      return;
-    }
-    console.log('Starting game');
-    sm.emit({
-      event: ClientEvents.GameStart,
-    });
-  };
-
-  const onEndGame = () => {
-    console.log('Ending game');
-    sm.emit({
-      event: ClientEvents.GameEnd,
-    });
-  }
 
   const returnToMenu = () => {
     setCurrentScreen('menu');
@@ -58,37 +36,30 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, setCurrentScr
         playerId,
       },
     });
-    // expect the new lobby state dispatched to be missing this player in the players array -> todo make a callback, for now check if playerId still in players array
+    // expect the new lobby state dispatched to be missing this player in the players array -> todo make a callback
   };
-
+  // Check if player has been kicked from the lobby
   useEffect(() => {
     if (lobbyState.players.find(player => player.id === localStorage.getItem('spyfall_myId')) === undefined) {
       console.log('You have been kicked from the lobby');
-      // Redirect to menu screen
-      returnToMenu();
+      returnToMenu(); // Redirect to menu screen
     }
   }, [lobbyState.players]);
 
-  const editUsername = (playerId: string) => {
-    console.log('Editing username');
-  };
 
-  const [openModal, setOpenModal] = useState(false);
-  useEffect(() => {
-    if (lobbyState.hasFinished) {
-      setOpenModal(true);
+  const onStartGame = () => {
+    if (lobbyState.players.length < MIN_PLAYERS) {
+      alert('Not enough players');
+      return;
     }
-  }, [lobbyState.hasFinished]);
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
+    console.log('Starting game');
+    sm.emit({
+      event: ClientEvents.GameStart,
+    });
   };
-
-  const [spy, setSpy] = useState<string | null>(null);
-  useEffect(() => {
-    const spy = lobbyState.players.find(player => player.role === 'spy')?.username || null;
-    setSpy(spy);
-  }, [lobbyState.hasStarted]);
+  if (lobbyState.gameStarted) { 
+    setCurrentScreen('game');
+  }
 
 
   const onLeaveLobby = () => {
@@ -96,51 +67,11 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, setCurrentScr
     returnToMenu();
   }
 
-  // TODO: refactor so that gamescreen is navigated to from game manager instead of contained in lobbyscreen
-  // if (lobbyState.hasStarted) { 
-  //   setCurrentScreen('game');
-  // }
 
-  if (lobbyState.hasStarted) {
-    return (
-      <div>
-        <Modal
-          open={openModal} // Control modal visibility with state
-          onClose={handleCloseModal}
-          aria-labelledby="game-over-title"
-          aria-describedby="game-over-description"
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              backgroundColor: 'white',
-              padding: 4,
-              borderRadius: 2,
-              boxShadow: 3,
-            }}
-          >
-            <Typography variant="h3" textAlign="center">Game Over</Typography>
+  const editUsername = (playerId: string) => {
+    console.log('Editing username');
+  };
 
-            <Typography variant="h6" textAlign="center">{spy} was the Spy!</Typography>
-
-            <Button variant="contained" color="primary" sx={{ marginTop: 2 }}
-                    onClick={() => {
-                      handleCloseModal();
-                      onEndGame();
-                    }}
-            >
-              Start New Game
-            </Button>
-          </Box>
-        </Modal>
-
-        <GameScreen lobbyState={lobbyState} />
-      </div>
-    );
-  }
 
   return (
     <div>

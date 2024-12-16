@@ -66,7 +66,7 @@ export class LobbyManager
       throw new ServerException(SocketExceptions.LobbyError, 'Lobby already full');
     }
 
-    if (lobby.instance.hasStarted) {
+    if (lobby.instance.gameStarted) {
       throw new ServerException(SocketExceptions.LobbyError, 'Game already started');
     }
 

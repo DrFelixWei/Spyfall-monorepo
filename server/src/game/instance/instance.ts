@@ -9,8 +9,8 @@ import { locations_1, locations_2 } from '@shared/locations';
 
 export class Instance {
   public players: Player[] = [];
-  public hasStarted: boolean = false;
-  public hasFinished: boolean = false;
+  public gameStarted: boolean = false;
+  public gameOver: boolean = false;
   public timer: number = 600000; // 10 minutes in milliseconds
   private timerInterval: NodeJS.Timeout | null = null; // To hold the interval ID
 
@@ -28,9 +28,9 @@ export class Instance {
       player.role = '';
       player.vote = '';
     });
-    this.hasStarted = false;
-    this.hasFinished = false;
-    this.timer = 60000;
+    this.gameStarted = false;
+    this.gameOver = false;
+    this.timer = 600000;
     this.location = '';
     this.roles = [];
 
@@ -39,7 +39,7 @@ export class Instance {
   
 
   public triggerStart(minClients: number): void {
-    if (this.hasStarted) {
+    if (this.gameStarted) {
       return;
     }
 
@@ -48,7 +48,7 @@ export class Instance {
     }
 
     this.initializeGame();
-    this.hasStarted = true;
+    this.gameStarted = true;
 
     // Start the timer
     this.startTimer();
@@ -59,12 +59,9 @@ export class Instance {
     });
   }
 
-  public triggerFinish(): void {
-    if (this.hasFinished || !this.hasStarted) {
-      return;
-    }
-
-    this.hasFinished = true;
+  public triggerGameOver(): void {
+    if (this.gameOver || !this.gameStarted) {return;}
+    this.gameOver = true;
 
     // Stop the timer
     if (this.timerInterval) {
@@ -85,7 +82,7 @@ export class Instance {
         this.timer -= 1000; // Decrease by 1 second
         this.lobby.dispatchLobbyState();
       } else {
-        this.triggerFinish();
+        this.triggerGameOver();
       }
     }, 1000);
   }

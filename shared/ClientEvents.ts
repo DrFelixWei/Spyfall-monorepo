@@ -11,6 +11,7 @@ export enum ClientEvents
 
   // Game
   GameStart = 'client.game.start',
-  GameEnd = 'client.game.finish',
+  GameEnd = 'client.game.end',
   GameVote = 'client.game.vote',
+  GameReturnToLobby = 'client.game.returnToLobby',
 }

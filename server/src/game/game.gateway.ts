@@ -119,5 +119,11 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     client.data.lobby?.endGame();
   }
 
+  @SubscribeMessage(ClientEvents.GameReturnToLobby)
+  onReturnToLobby(client: AuthenticatedSocket): void
+  {
+    client.data.lobby?.resetGame();
+  }
+
 
 }
