@@ -7,6 +7,8 @@ import { useRecoilState } from 'recoil';
 import { CurrentLobbyState } from './states';
 import MenuScreen from './MenuScreen';
 import LobbyScreen from './LobbyScreen';
+import Message from './Message';
+import GameScreen from './GameScreen';
 
 // Define the types for GameManager props
 interface GameManagerProps {
@@ -17,6 +19,8 @@ interface GameManagerProps {
 export default function GameManager() {
   const { sm } = useSocketManager();
   const [lobbyState, setLobbyState] = useRecoilState(CurrentLobbyState);
+
+  const [gameMessage, setGameMessage] = useState({ color: '', content: '' });
 
   useEffect(() => {
     sm.connect();
@@ -31,8 +35,8 @@ export default function GameManager() {
     }
 
     const onGameMessage = ({ color, message }: { color: string; message: string }) => {
-      // TO DO - Implement game message handling
       console.log(message); 
+      setGameMessage({ color, content: message });
     };
 
     sm.registerListener(ServerEvents.LobbyState, onLobbyState);
@@ -54,11 +58,19 @@ export default function GameManager() {
     }
   }, [lobbyState]);
 
-  console.log("currentScreen", currentScreen);
-  if (currentScreen === 'menu') {
-    return <MenuScreen sm={sm} />;
-  }
-  if (currentScreen === 'lobby' && lobbyState !== null) {
-    return <LobbyScreen sm={sm} lobbyState={lobbyState} returnToMenu={() => setCurrentScreen('menu')}/>;
-  }
+  return(
+    <>
+        {gameMessage && (
+        <Message
+          color={gameMessage.color}
+          content={gameMessage.content}
+          onClose={() => setGameMessage({ color: '', content: '' })} 
+        />
+      )}
+
+      {currentScreen === 'menu' && <MenuScreen sm={sm} />}
+      {currentScreen === 'lobby' && lobbyState !== null && <LobbyScreen sm={sm} lobbyState={lobbyState} setCurrentScreen={setCurrentScreen} />}
+      {/* {currentScreen === 'game' && lobbyState !==null && <GameScreen lobbyState={lobbyState} />} */}  {/* TODO: refactor so that gamescreen is navigated to from game manager instead of contained in lobbyscreen */}
+    </>
+  )
 }

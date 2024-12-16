@@ -12,10 +12,10 @@ import GameScreen from './GameScreen';
 interface LobbyScreenProps {
   sm: ReturnType<typeof useSocketManager>['sm']; 
   lobbyState: ServerPayloads[ServerEvents.LobbyState];
-  returnToMenu: () => void;
+  setCurrentScreen: (screen: string) => void;
 }
 
-const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, returnToMenu }) => {
+const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, setCurrentScreen }) => {
 
   const MIN_PLAYERS = 3;
   const MAX_PLAYERS = 8;
@@ -38,6 +38,10 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, returnToMenu 
     sm.emit({
       event: ClientEvents.GameEnd,
     });
+  }
+
+  const returnToMenu = () => {
+    setCurrentScreen('menu');
   }
 
   const host = lobbyState.players[0];
@@ -88,10 +92,14 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, returnToMenu 
 
 
   const onLeaveLobby = () => {
-    //clear id from local storage
-    localStorage.removeItem('spyfall_myId');
+    localStorage.removeItem('spyfall_myId'); //clear id from local storage
     returnToMenu();
   }
+
+  // TODO: refactor so that gamescreen is navigated to from game manager instead of contained in lobbyscreen
+  // if (lobbyState.hasStarted) { 
+  //   setCurrentScreen('game');
+  // }
 
   if (lobbyState.hasStarted) {
     return (
