@@ -10,4 +10,8 @@ export default defineConfig({
       '@shared': path.resolve(__dirname, '../shared'),
     },
   },
+  server: {
+    host: '0.0.0.0', // Bind to 0.0.0.0 so Render can access it
+    port: 3001,      // Use a port Render expects (e.g., 3001)
+  },
 });
