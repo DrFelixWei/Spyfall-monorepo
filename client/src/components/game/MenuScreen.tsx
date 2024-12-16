@@ -70,6 +70,10 @@ const MenuScreen: React.FC<MenuProps> = ({
     }
   };
 
+  const onNavBack = () => {
+    setStartOrJoin('');
+  };
+
   if (startOrJoin === 'create') {
     return (
       <div style={containerStyle}>
@@ -81,6 +85,7 @@ const MenuScreen: React.FC<MenuProps> = ({
           maxLength={10} 
         />
         <button onClick={onCreateLobby}>Create Game</button>
+        <button onClick={onNavBack}>Back</button>
       </div>
     );
   }
@@ -101,6 +106,8 @@ const MenuScreen: React.FC<MenuProps> = ({
           onChange={(e) => setLobbyCode(e.target.value)}  
         />
         <button onClick={onJoinLobby}>Join Game</button>
+
+        <button onClick={onNavBack}>Back</button>
       </div>
     );
   }

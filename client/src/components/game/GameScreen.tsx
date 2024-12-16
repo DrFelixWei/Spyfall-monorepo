@@ -1,153 +1,113 @@
-import React, { useEffect, useState } from 'react';
-import { useSocketManager } from '../../hooks/useSocketManager';
-import { ServerEvents } from '@shared/ServerEvents';
-import type { ServerPayloads } from '@shared/ServerPayloads';
-import { ClientEvents } from '@shared/ClientEvents';
-import { useLocation } from 'react-router-dom';
-import { Box, Typography, Button, Grid, IconButton, Modal } from "@mui/material";
-import KickIcon from '@mui/icons-material/Close'; 
-import GameUI from './GameUI';
+import React, { useState } from "react";
+import { Box, Card, CardContent, Typography, Button } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import type { ServerPayloads } from "@shared/ServerPayloads";
+import { ServerEvents } from "@shared/ServerEvents";
 
 interface GameScreenProps {
-  sm: ReturnType<typeof useSocketManager>['sm']; 
   lobbyState: ServerPayloads[ServerEvents.LobbyState];
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({ sm, lobbyState }) => {
+const GameScreen: React.FC<GameScreenProps> = ({ lobbyState }) => {
+  const locations = lobbyState.locations; // a string array
+  const location = lobbyState.location; // a string
+  const roles = lobbyState.roles; // a string array
+  const myId = localStorage.getItem("spyfall_myId"); // a string
+  const myRole = lobbyState.players.find((player) => player.id === myId)?.role; // a string
+  const players = lobbyState.players.map((player) => player.username); // a string array
+  const time = lobbyState.time; // a number, milliseconds
 
-  const MIN_PLAYERS = 3;
-  const MAX_PLAYERS = 8;
-
-  console.log("lobbyState", lobbyState);
-
-  const onStartGame = () => {
-    if (lobbyState.players.length < MIN_PLAYERS) {
-      alert('Not enough players');
-      return;
-    }
-    console.log('Starting game');
-    sm.emit({
-      event: ClientEvents.GameStart,
-    });
+  const handleLocationClick = () => {
+    // to do - toggle strikethrough font style
   };
 
-  const onEndGame = () => {
-    console.log('Ending game');
-    sm.emit({
-      event: ClientEvents.GameEnd,
-    });
-  }
-
-  const handleKickPlayer = (playerId: string) => {
-    // Implement player kicking logic
-    console.log(`Kicking player: ${playerId}`);
+  const handleVoteClick = () => {
+    // to do - implement voting logic
   };
 
-  const [openModal, setOpenModal] = useState(false);
-  useEffect(() => {
-    if (lobbyState.hasFinished) {
-      setOpenModal(true);
-    }
-  }, [lobbyState.hasFinished]);
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const containerStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column', // Stacks items vertically
+    justifyContent: 'center', // Centers vertically
+    alignItems: 'center', // Centers horizontally
+    // height: '100vh',
+    maxWidth: '60vw',
   };
 
-  const [spy, setSpy] = useState<string | null>(null);
-  useEffect(() => {
-    const spy = lobbyState.players.find(player => player.role === 'spy')?.username || null;
-    setSpy(spy);
-  }, [lobbyState.hasStarted]);
-
-  if (lobbyState.hasStarted) {
-    return (
-      <div>
-        <Modal
-          open={openModal} // Control modal visibility with state
-          onClose={handleCloseModal}
-          aria-labelledby="game-over-title"
-          aria-describedby="game-over-description"
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              backgroundColor: 'white',
-              padding: 4,
-              borderRadius: 2,
-              boxShadow: 3,
-            }}
-          >
-            <Typography variant="h3" textAlign="center">Game Over</Typography>
-
-            <Typography variant="h6" textAlign="center">{spy} was the Spy!</Typography>
-
-            <Button variant="contained" color="primary" sx={{ marginTop: 2 }}
-                    onClick={() => {
-                      handleCloseModal();
-                      onEndGame();
-                    }}
-            >
-              Start New Game
-            </Button>
-          </Box>
-        </Modal>
-
-        <GameUI lobbyState={lobbyState} />
-      </div>
-    );
+  const formatTime = (ms: number) => {
+    const seconds = Math.floor((ms / 1000) % 60);
+    const minutes = Math.floor((ms / 1000 / 60) % 60);
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
 
   return (
-    <div>
-      <Typography variant="h6" mb={2} textAlign="center">
-        Lobby Code: {lobbyState.lobbyId}
-      </Typography>
+    <div style={containerStyle}>
+    <Box sx={{ p: 3, backgroundColor: "background.default", color: "text.primary" }}>
+      {/* Location display */}
+      <Box textAlign="center" mb={2}>
+        <Typography variant="h4" fontWeight="bold">
+          {myRole === "spy" ? "???" : location}
+        </Typography>
+        <Typography variant="subtitle1" color="text.secondary">
+          Your Role: {myRole || "N/A"}
+        </Typography>
+      </Box>
 
-      <Box mb={3}>
-        <Typography variant="h6" mb={2}>Players</Typography>
-        <Grid container spacing={2} justifyContent="center">
-          {lobbyState.players.map((player, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Box
+      {/* Timer display */}
+      <Box textAlign="center" mb={2}>
+        <Typography variant="h6" fontWeight="bold">
+          Time Left: {formatTime(time!!)}
+        </Typography>
+      </Box>
+
+        {/* Players voting panel */}
+        <Box>
+        <Typography variant="h6" mb={1}>
+          Players
+        </Typography>
+        <Grid container spacing={2}>
+          {players.map((player, index) => (
+              <Card
+                key={index}
+                onClick={handleVoteClick}
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: 2,
-                  backgroundColor: 'background.paper',
-                  borderRadius: 2,
-                  boxShadow: 1,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  p: 1,
                 }}
               >
-                <Typography variant="body1">{player.username}</Typography>
-                <IconButton
-                  onClick={() => handleKickPlayer(player.id)}
-                  color="error"
-                  aria-label="kick player"
-                >
-                  <KickIcon />
-                </IconButton>
-              </Box>
-            </Grid>
+                <Typography variant="body1">{player}</Typography>
+              </Card>
           ))}
         </Grid>
       </Box>
 
-      <Box textAlign="center">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onStartGame}
-          disabled={lobbyState.players.length < MIN_PLAYERS}
-          sx={{ fontSize: 16, padding: '10px 20px' }}
-        >
-          Start Game
-        </Button>
+      {/* Grid of possible locations */}
+      <Box mb={3}>
+        <Typography variant="h6" mb={1}>
+          Possible Locations
+        </Typography>
+        <Grid container spacing={2} columns={{ xs: 1, sm: 2, md: 3 }}>
+          {locations!!.map((loc, index) => (
+              <Card
+                key={index}
+                variant="outlined"
+                sx={{ cursor: "pointer", textAlign: "center", paddingTop: 0, paddingBottom: 0 }}
+                onClick={handleLocationClick}
+              >
+                {/* <CardContent sx={{ paddingTop: 0, paddingBottom: 0 }}> */}
+                  <Typography variant="body2" sx={{ padding: 0.5 }}>{loc}</Typography>
+                {/* </CardContent> */}
+              </Card>
+          ))}
+        </Grid>
       </Box>
+
+
+    </Box>
     </div>
   );
 };

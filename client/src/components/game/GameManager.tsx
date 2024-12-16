@@ -6,7 +6,7 @@ import { ClientEvents } from '@shared/ClientEvents';
 import { useRecoilState } from 'recoil';
 import { CurrentLobbyState } from './states';
 import MenuScreen from './MenuScreen';
-import GameScreen from './GameScreen';
+import LobbyScreen from './LobbyScreen';
 
 // Define the types for GameManager props
 interface GameManagerProps {
@@ -49,5 +49,5 @@ export default function GameManager() {
   if (lobbyState === null) {
     return <MenuScreen sm={sm} />;
   }
-  return <GameScreen sm={sm} lobbyState={lobbyState} />;
+  return <LobbyScreen sm={sm} lobbyState={lobbyState} />;
 }

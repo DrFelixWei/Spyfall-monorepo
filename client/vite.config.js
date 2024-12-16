@@ -12,6 +12,6 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0', // Bind to 0.0.0.0 so Render can access it
-    port: 3001,      // Use a port Render expects (e.g., 3001)
+    port: 5173,      // Use a port Render expects
   },
 });

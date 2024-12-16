@@ -4,4 +4,3 @@
 - allow host to kick users
 - allow users to edit their username
 - add player icons
-- add menu navigation
