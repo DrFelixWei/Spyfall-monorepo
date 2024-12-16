@@ -89,7 +89,6 @@ export class Lobby
 
   public dispatchLobbyState(): void
   {
-    console.log('dispatching lobby state');
     const payload: ServerPayloads[ServerEvents.LobbyState] = {
       lobbyId: this.id,
       players: this.instance.players,
