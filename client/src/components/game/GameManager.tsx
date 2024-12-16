@@ -46,8 +46,19 @@ export default function GameManager() {
     };
   }, [sm, setLobbyState]);
 
-  if (lobbyState === null) {
+
+  const [currentScreen, setCurrentScreen] = useState('menu'); 
+  useEffect(() => {
+    if (lobbyState !== null && currentScreen === 'menu') {
+      setCurrentScreen('lobby');
+    }
+  }, [lobbyState]);
+
+  console.log("currentScreen", currentScreen);
+  if (currentScreen === 'menu') {
     return <MenuScreen sm={sm} />;
   }
-  return <LobbyScreen sm={sm} lobbyState={lobbyState} />;
+  if (currentScreen === 'lobby' && lobbyState !== null) {
+    return <LobbyScreen sm={sm} lobbyState={lobbyState} returnToMenu={() => setCurrentScreen('menu')}/>;
+  }
 }

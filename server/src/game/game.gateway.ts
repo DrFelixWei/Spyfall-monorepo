@@ -15,7 +15,7 @@ import { LobbyManager } from '@app/game/lobby/lobby.manager';
 import { Logger, UsePipes } from '@nestjs/common';
 import { AuthenticatedSocket } from '@app/game/types';
 import { ServerException } from '@app/game/server.exception';
-import { LobbyCreateDto, LobbyJoinDto } from '@app/game/dtos';
+import { LobbyCreateDto, LobbyJoinDto, LobbyKickDto } from '@app/game/dtos';
 import { WsValidationPipe } from '@app/websocket/ws.validation-pipe';
 
 @UsePipes(new WsValidationPipe())
@@ -99,6 +99,12 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   {
     // this.lobbyManager.leaveLobby(client);
     client.data.lobby?.removeClient(client);
+  }
+
+  @SubscribeMessage(ClientEvents.LobbyKick)
+  onLobbyKick(client: AuthenticatedSocket, data: LobbyKickDto): void
+  {
+    client.data.lobby?.kickClient(data.playerId);
   }
 
   @SubscribeMessage(ClientEvents.GameStart)

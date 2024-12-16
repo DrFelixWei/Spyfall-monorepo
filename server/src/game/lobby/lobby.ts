@@ -54,6 +54,27 @@ export class Lobby
     this.dispatchLobbyState();
   }
 
+  public kickClient(playerId: string, client: AuthenticatedSocket): void
+  {
+    let usernameKicked = this.instance.players.find(player => player.id === playerId)?.username;
+    console.log('Kicking player', usernameKicked);
+
+    this.clients.delete(playerId);
+    // client.leave(this.id);
+    // client.data.lobby = null;
+
+    // Update players list in instance
+    this.instance.players = this.instance.players.filter(player => player.id !== playerId);
+
+    // Alert the remaining player that client left lobby
+    this.dispatchToLobby<ServerPayloads[ServerEvents.GameMessage]>(ServerEvents.GameMessage, {
+      color: 'blue',
+      message: `Host kicked ${usernameKicked}!`,
+    });
+
+    this.dispatchLobbyState();
+  }
+
   public startGame(): void
   {
     this.instance.triggerStart(this.minClients);

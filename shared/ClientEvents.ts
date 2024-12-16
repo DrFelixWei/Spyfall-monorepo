@@ -7,6 +7,7 @@ export enum ClientEvents
   LobbyCreate = 'client.lobby.create',
   LobbyJoin = 'client.lobby.join',
   LobbyLeave = 'client.lobby.leave',
+  LobbyKick = 'client.lobby.kick',
 
   // Game
   GameStart = 'client.game.start',

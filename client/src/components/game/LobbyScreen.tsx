@@ -6,14 +6,16 @@ import { ClientEvents } from '@shared/ClientEvents';
 import { useLocation } from 'react-router-dom';
 import { Box, Typography, Button, Grid, IconButton, Modal } from "@mui/material";
 import KickIcon from '@mui/icons-material/Close'; 
+import EditIcon from '@mui/icons-material/Edit';
 import GameScreen from './GameScreen';
 
 interface LobbyScreenProps {
   sm: ReturnType<typeof useSocketManager>['sm']; 
   lobbyState: ServerPayloads[ServerEvents.LobbyState];
+  returnToMenu: () => void;
 }
 
-const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState }) => {
+const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, returnToMenu }) => {
 
   const MIN_PLAYERS = 3;
   const MAX_PLAYERS = 8;
@@ -38,9 +40,33 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState }) => {
     });
   }
 
+  const host = lobbyState.players[0];
+  const isHost = host.id === localStorage.getItem('spyfall_myId');
+
   const handleKickPlayer = (playerId: string) => {
-    // Implement player kicking logic
-    console.log(`Kicking player: ${playerId}`);
+    if (!isHost) {
+      console.log('Only the host can kick players');
+      return;
+    }
+    sm.emit({
+      event: ClientEvents.LobbyKick,
+      data: {
+        playerId,
+      },
+    });
+    // expect the new lobby state dispatched to be missing this player in the players array -> todo make a callback, for now check if playerId still in players array
+  };
+
+  useEffect(() => {
+    if (lobbyState.players.find(player => player.id === localStorage.getItem('spyfall_myId')) === undefined) {
+      console.log('You have been kicked from the lobby');
+      // Redirect to menu screen
+      returnToMenu();
+    }
+  }, [lobbyState.players]);
+
+  const editUsername = (playerId: string) => {
+    console.log('Editing username');
   };
 
   const [openModal, setOpenModal] = useState(false);
@@ -59,6 +85,13 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState }) => {
     const spy = lobbyState.players.find(player => player.role === 'spy')?.username || null;
     setSpy(spy);
   }, [lobbyState.hasStarted]);
+
+
+  const onLeaveLobby = () => {
+    //clear id from local storage
+    localStorage.removeItem('spyfall_myId');
+    returnToMenu();
+  }
 
   if (lobbyState.hasStarted) {
     return (
@@ -108,7 +141,7 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState }) => {
       </Typography>
 
       <Box mb={3}>
-        <Typography variant="h6" mb={2}>Players</Typography>
+        <Typography variant="h6" mb={3}>Players</Typography>
         <Grid container spacing={2} justifyContent="center">
           {lobbyState.players.map((player, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
@@ -123,7 +156,12 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState }) => {
                   boxShadow: 1,
                 }}
               >
+                { player.id === host.id &&
+                <div style={{ margin: '8px 8px 8px 4px', fontSize:'16px'}}>👑</div>
+                }
                 <Typography variant="body1">{player.username}</Typography>
+                
+                { isHost && player.id !== host.id &&
                 <IconButton
                   onClick={() => handleKickPlayer(player.id)}
                   color="error"
@@ -131,6 +169,18 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState }) => {
                 >
                   <KickIcon />
                 </IconButton>
+                }
+
+                {/* { player.id === localStorage.getItem('spyfall_myId') &&
+                <IconButton
+                  onClick={() => editUsername(player.id)}
+                  color="error"
+                  aria-label="edit name"
+                >
+                  <EditIcon fontSize='small' style={{ fontSize: '1rem', color: 'black' }}/>
+                </IconButton>
+                } */}
+
               </Box>
             </Grid>
           ))}
@@ -146,6 +196,15 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState }) => {
           sx={{ fontSize: 16, padding: '10px 20px' }}
         >
           Start Game
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onLeaveLobby}
+          sx={{ fontSize: 16, padding: '10px 20px' }}
+        >
+          Leave
         </Button>
       </Box>
     </div>

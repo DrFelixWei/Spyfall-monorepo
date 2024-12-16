@@ -15,6 +15,12 @@ export class LobbyJoinDto
   username: string;
 }
 
+export class LobbyKickDto
+{
+  @IsString()
+  playerId: string;
+}
+
 export class GameVoteDto
 {
   // @IsString()
