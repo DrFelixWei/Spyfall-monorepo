@@ -9,6 +9,7 @@ The original game was a boardgame. Since then, there have been several online it
 - Felix Wei
 
 ## Hosting
+(the server is hosted free-tier on render so it takes up to 50 seconds to spin up from inactivity)
 1. https://spyfall-flix.netlify.app/
 2. https://spyfall-client-5jtz.onrender.com/
 
@@ -16,16 +17,16 @@ The original game was a boardgame. Since then, there have been several online it
 ## Tech Stack
 Frontend: vite-react - philosphy of choosing this over nextjs is that I'm using a single page that conditionally renders based on server data
 Backend: nestjs + sockets
+(the UML folder contains a rough outline of how the code works)
 
 
 ## Installation
 1. Clone this repo
-2. run npm install in both the client and server dir
+2. Run npm install in both the client and server dir
 
 
 ## Usage
 The monorepo is configured to be able to start both services from the root: `npm run start`
-
 Client -> npm run dev
 Server -> npm run start:dev
 Shared folder builds to both
