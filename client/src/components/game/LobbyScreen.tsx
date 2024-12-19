@@ -65,6 +65,9 @@ const LobbyScreen: React.FC<LobbyScreenProps> = ({ sm, lobbyState, setCurrentScr
   const onLeaveLobby = () => {
     localStorage.removeItem('spyfall_myId'); //clear id from local storage
     returnToMenu();
+    sm.emit({
+      event: ClientEvents.LobbyLeave,
+    }); 
   }
 
 
