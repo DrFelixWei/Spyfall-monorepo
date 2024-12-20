@@ -27,6 +27,7 @@ export class Instance {
     this.players.forEach(player => {
       player.role = '';
       player.vote = '';
+      player.hasFirstQuestion = false;
     });
     this.gameStarted = false;
     this.gameOver = false;
@@ -116,5 +117,9 @@ export class Instance {
         player.role = rolesPlusSpy.splice(roleIndex, 1)[0];
       }
     });
+
+    // Assign first question
+    const firstQuestionIndex = Math.floor(Math.random() * this.players.length);
+    this.players[firstQuestionIndex].hasFirstQuestion = true;
   }
 }

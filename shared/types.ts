@@ -13,4 +13,6 @@ export type Player = {
 
   role?: string; 
   vote?: string; // the id of another player
+
+  hasFirstQuestion?: boolean;
 }

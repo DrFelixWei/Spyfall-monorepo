@@ -18,7 +18,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ sm, lobbyState, setCurrentScree
   const roles = lobbyState.roles; // a string array
   const myId = localStorage.getItem("spyfall_myId"); // a string
   const myRole = lobbyState.players.find((player) => player.id === myId)?.role; // a string
-  const players = lobbyState.players.map((player) => player.username); // a string array
+  const players = lobbyState.players
   const time = lobbyState.time; // a number, milliseconds
 
   const host = lobbyState.players[0];
@@ -161,7 +161,8 @@ const GameScreen: React.FC<GameScreenProps> = ({ sm, lobbyState, setCurrentScree
                     p: 1,
                   }}
                 >
-                  <Typography variant="body1">{player}</Typography>
+                  { player.hasFirstQuestion && <div style={{ margin: '8px 8px 8px 4px', fontSize:'16px'}}>👉</div>}
+                  <Typography variant="body1">{player.username}</Typography>
                 </Card>
             ))}
           </Grid>
