@@ -62,6 +62,16 @@ const MenuScreen: React.FC<MenuProps> = ({
     justifyContent: 'center', // Centers vertically
     alignItems: 'center', // Centers horizontally
   };
+  const buttonStyle: React.CSSProperties = {
+    margin: '5px',
+    padding: '20px 30px', 
+    fontSize: '24px',
+    borderRadius: '8px', 
+  };
+  const inputStyle: React.CSSProperties = {
+    padding: '10px', 
+    fontSize: '20px',
+  };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= 10) {
@@ -82,9 +92,10 @@ const MenuScreen: React.FC<MenuProps> = ({
           value={username}
           onChange={handleUsernameChange}
           maxLength={10} 
+          style={inputStyle}
         />
-        <button onClick={onCreateLobby}>Create Game</button>
-        <button onClick={onNavBack}>Back</button>
+        <button onClick={onCreateLobby} style={buttonStyle}>Create Game</button>
+        <button onClick={onNavBack} style={buttonStyle}>Back</button>
       </div>
     );
   }
@@ -98,23 +109,25 @@ const MenuScreen: React.FC<MenuProps> = ({
           value={username}
           onChange={handleUsernameChange}
           maxLength={10}
+          style={inputStyle}
         />
         <input
           type="text"
           placeholder="Enter lobby code"
           onChange={(e) => setLobbyCode(e.target.value)}  
+          style={inputStyle}
         />
-        <button onClick={onJoinLobby}>Join Game</button>
+        <button onClick={onJoinLobby} style={buttonStyle}>Join Game</button>
 
-        <button onClick={onNavBack}>Back</button>
+        <button onClick={onNavBack} style={buttonStyle}>Back</button>
       </div>
     );
   }
 
   return (
     <div style={containerStyle}>
-      <button onClick={onCreateGame}>Create Game</button>
-      <button onClick={onJoinGame}>Join Game</button>
+      <button onClick={onCreateGame} style={buttonStyle}>Create Game</button>
+      <button onClick={onJoinGame} style={buttonStyle}>Join Game</button>
     </div>
   );
 };
