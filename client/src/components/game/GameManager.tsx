@@ -131,7 +131,7 @@ export default function GameManager() {
       </Box>
 
       <Box component="footer" sx={{ padding: 2 }}>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body2" color="textPrimary">
           Spyfall is originally a 3-8 player card game designed by Alexander Ushan
           and published by Hobby World. This project is a digital adaptation of
           the game.
