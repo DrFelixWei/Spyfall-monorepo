@@ -61,7 +61,6 @@ const MenuScreen: React.FC<MenuProps> = ({
     flexDirection: 'column', // Stacks items vertically
     justifyContent: 'center', // Centers vertically
     alignItems: 'center', // Centers horizontally
-    height: '100vh', // Full viewport height (optional)
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -9,6 +9,8 @@ import MenuScreen from './MenuScreen';
 import LobbyScreen from './LobbyScreen';
 import Message from './Message';
 import GameScreen from './GameScreen';
+import { Container, Box, Typography, Tooltip, IconButton, Link, } from '@mui/material';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 // Define the types for GameManager props
 interface GameManagerProps {
@@ -58,19 +60,95 @@ export default function GameManager() {
     }
   }, [lobbyState]);
 
-  return(
-    <>
-        {gameMessage && (
-        <Message
-          color={gameMessage.color}
-          content={gameMessage.content}
-          onClose={() => setGameMessage({ color: '', content: '' })} 
-        />
+  return (
+    <Container
+      maxWidth="lg"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: '100vh',
+        textAlign: 'center',
+      }}
+    >
+      <Box component="header" sx={{ padding: 2, flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="h4" fontWeight="bold">
+          Spyfall
+        </Typography>
+        <Tooltip
+          title={
+            <Typography variant="body2" sx={{ maxWidth: 300 }}>
+              Spyfall is a 3-8 player game where players take turns asking each other questions.
+              One player is secretly a spy trying to figure out the location, without revealing their identity. 
+              The other players' goal is to identify the spy by asking each other questions without revealing too much information that would allow the spy to figure out the location.
+            </Typography>
+          }
+          arrow
+        >
+          <IconButton>
+            <HelpOutlineIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
+      </Box>
+
+      {gameMessage.content && (
+        <Box sx={{ marginBottom: 2 }}>
+          <Message
+            color={gameMessage.color}
+            content={gameMessage.content}
+            onClose={() => setGameMessage({ color: '', content: '' })}
+          />
+        </Box>
       )}
 
-      {currentScreen === 'menu' && <MenuScreen sm={sm} />}
-      {currentScreen === 'lobby' && lobbyState !== null && <LobbyScreen sm={sm} lobbyState={lobbyState} setCurrentScreen={setCurrentScreen} />}
-      {currentScreen === 'game' && lobbyState !==null && <GameScreen sm={sm} lobbyState={lobbyState} setCurrentScreen={setCurrentScreen} />}  
-    </>
-  )
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}
+      >
+        {currentScreen === 'menu' && <MenuScreen sm={sm} />}
+        {currentScreen === 'lobby' &&
+          lobbyState !== null && (
+            <LobbyScreen
+              sm={sm}
+              lobbyState={lobbyState}
+              setCurrentScreen={setCurrentScreen}
+            />
+          )}
+        {currentScreen === 'game' &&
+          lobbyState !== null && (
+            <GameScreen
+              sm={sm}
+              lobbyState={lobbyState}
+              setCurrentScreen={setCurrentScreen}
+            />
+          )}
+      </Box>
+
+      <Box component="footer" sx={{ padding: 2 }}>
+        <Typography variant="body2" color="textSecondary">
+          Spyfall is originally a 3-8 player card game designed by Alexander Ushan
+          and published by Hobby World. This project is a digital adaptation of
+          the game.
+          Source code available at{' '}
+          <Link
+            href="https://github.com/DrFelixWei/Spyfall-monorepo"
+            target="_blank"
+            rel="noreferrer"
+            underline="hover"
+          >
+            github.com/DrFelixWei/Spyfall
+          </Link>
+        </Typography>
+        <Typography variant="caption" color="warning">
+          Disclaimer: I am hosting this on a free-tier so the server can take up to 1 minute to wake up from inactivity.
+        </Typography>
+      </Box>
+    </Container>
+  );
 }
